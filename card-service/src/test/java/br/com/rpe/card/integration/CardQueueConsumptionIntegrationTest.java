@@ -15,18 +15,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
+import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "spring.autoconfigure.exclude=io.awspring.cloud.autoconfigure.sqs.SqsAutoConfiguration"
+)
 @ActiveProfiles("test")
 class CardQueueConsumptionIntegrationTest {
 
@@ -47,6 +50,9 @@ class CardQueueConsumptionIntegrationTest {
 
     @MockBean
     private ProductCachePort productCachePort;
+
+    @MockBean
+    private SqsAsyncClient sqsAsyncClient;
 
     @BeforeEach
     void setUp() {
