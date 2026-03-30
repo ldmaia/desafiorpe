@@ -1,0 +1,10 @@
+CREATE TABLE holders (
+    id UUID PRIMARY KEY,
+    name VARCHAR(120) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    birth_date DATE NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    product_id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL
+);

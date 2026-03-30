@@ -1,0 +1,3 @@
+CREATE DATABASE product_db;
+CREATE DATABASE holder_db;
+CREATE DATABASE card_db;

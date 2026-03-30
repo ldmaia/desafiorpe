@@ -1,0 +1,9 @@
+.git
+.idea
+.vscode
+logs
+**/target
+**/.classpath
+**/.project
+**/.settings
+README-local.md

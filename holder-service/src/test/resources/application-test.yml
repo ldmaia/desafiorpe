@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:holderdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: test
+        secret-key: test
+      sqs:
+        endpoint: http://localhost:4566
+
+security:
+  jwt:
+    secret: my-super-secret-key-for-rpe-challenge-2026
+    expiration-seconds: 3600
+  in-memory:
+    username: admin
+    password: admin123
+    role: ADMIN
+
+app:
+  sqs:
+    card-issuance-queue: card-issuance-queue
+  clients:
+    card-service:
+      base-url: http://localhost:8083

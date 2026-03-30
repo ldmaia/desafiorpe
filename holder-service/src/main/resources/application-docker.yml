@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/holder_db
+    username: postgres
+    password: postgres
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: test
+        secret-key: test
+      sqs:
+        endpoint: http://localstack:4566
+
+app:
+  clients:
+    card-service:
+      base-url: http://card-service:8083

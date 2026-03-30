@@ -1,0 +1,406 @@
+{
+  "info": {
+    "_postman_id": "f8c2bb58-6747-4bc7-a4f3-5d9cb71f4db5",
+    "name": "Card Processing Platform",
+    "description": "Collection para validar o fluxo principal do desafio tecnico da plataforma de emissao de cartoes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Variaveis principais da collection:",
+          "// productBaseUrl, holderBaseUrl, cardBaseUrl, username, password, accessToken, productId, holderId"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "productBaseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "holderBaseUrl",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "cardBaseUrl",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "username",
+      "value": "admin"
+    },
+    {
+      "key": "password",
+      "value": "admin123"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "productId",
+      "value": ""
+    },
+    {
+      "key": "holderId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Product Service",
+      "item": [
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "var response = pm.response.json();",
+                  "pm.collectionVariables.set('productId', response.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Black\",\n  \"status\": \"ATIVO\"\n}"
+            },
+            "url": {
+              "raw": "{{productBaseUrl}}/api/v1/products",
+              "host": [
+                "{{productBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products"
+              ]
+            },
+            "description": "Cria um produto e salva automaticamente o productId na collection."
+          }
+        },
+        {
+          "name": "Get Product By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{productBaseUrl}}/api/v1/products/{{productId}}",
+              "host": [
+                "{{productBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products",
+                "{{productId}}"
+              ]
+            },
+            "description": "Consulta o produto salvo anteriormente."
+          }
+        },
+        {
+          "name": "Cancel Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CANCELADO\"\n}"
+            },
+            "url": {
+              "raw": "{{productBaseUrl}}/api/v1/products/{{productId}}/status",
+              "host": [
+                "{{productBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "products",
+                "{{productId}}",
+                "status"
+              ]
+            },
+            "description": "Endpoint util para validar a troca de status do produto."
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Holder Service",
+      "item": [
+        {
+          "name": "Generate JWT Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var response = pm.response.json();",
+                  "pm.collectionVariables.set('accessToken', response.accessToken);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{holderBaseUrl}}/api/v1/auth/token",
+              "host": [
+                "{{holderBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "token"
+              ]
+            },
+            "description": "Gera o JWT e salva automaticamente o accessToken na collection."
+          }
+        },
+        {
+          "name": "Create Holder",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "var response = pm.response.json();",
+                  "pm.collectionVariables.set('holderId', response.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lucas Silva\",\n  \"cpf\": \"12345678901\",\n  \"birthDate\": \"1990-05-10\",\n  \"status\": \"ATIVO\",\n  \"productId\": \"{{productId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{holderBaseUrl}}/api/v1/holders",
+              "host": [
+                "{{holderBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "holders"
+              ]
+            },
+            "description": "Cadastra um portador e publica a solicitacao de emissao no SQS."
+          }
+        },
+        {
+          "name": "Get Holder By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{holderBaseUrl}}/api/v1/holders/{{holderId}}",
+              "host": [
+                "{{holderBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "holders",
+                "{{holderId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Aggregated Holder View",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{holderBaseUrl}}/api/v1/holders/{{holderId}}/full",
+              "host": [
+                "{{holderBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "holders",
+                "{{holderId}}",
+                "full"
+              ]
+            },
+            "description": "Consulta agregada. Como a emissao e assincrona, pode ser necessario aguardar alguns segundos apos criar o portador."
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Card Service",
+      "item": [
+        {
+          "name": "Get Card By Holder Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{cardBaseUrl}}/api/v1/cards/by-holder/{{holderId}}",
+              "host": [
+                "{{cardBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cards",
+                "by-holder",
+                "{{holderId}}"
+              ]
+            },
+            "description": "Consulta o cartao emitido para o holder. Como a emissao e assincrona, pode ser necessario aguardar alguns segundos apos criar o portador."
+          }
+        }
+      ]
+    }
+  ]
+}

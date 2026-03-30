@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:carddb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cloud:
+    aws:
+      region:
+        static: us-east-1
+      credentials:
+        access-key: test
+        secret-key: test
+      sqs:
+        endpoint: http://localhost:4566
+
+app:
+  sqs:
+    card-issuance-queue: card-issuance-queue
+  cache:
+    product-ttl-minutes: 30
+  clients:
+    product-service:
+      base-url: http://localhost:8081
