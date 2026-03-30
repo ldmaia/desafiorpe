@@ -61,7 +61,7 @@ Essa abordagem se adequa bem aqui porque o desafio possui múltiplas formas de e
 
 Com a arquitetura hexagonal, a regra de negócio fica isolada dos detalhes de framework e infraestrutura, o que facilita evolução, testes, manutenção e troca de adapters sem espalhar acoplamento pelo código.
 
-## Stack Tecnológica
+## Stack
 
 - Java 17
 - Spring Boot 3.3.x
@@ -305,10 +305,6 @@ Isso é especialmente útil em um projeto com múltiplas fronteiras:
 - domínio ↔ response REST
 - response de integração ↔ snapshot interno
 
-### 7. Métodos menores e intention-revealing names
-
-Foi adotada a prática de extrair retornos e construções maiores para métodos privados com nomes semânticos. Isso melhora a leitura, reduz blocos excessivos e facilita manutenção.
-
 ## Como o sistema impede a criação de cartão para produto inexistente
 
 Essa garantia acontece no `card-service`, que é o responsável final pela emissão.
@@ -358,22 +354,3 @@ Em outras palavras: o `holder-service` solicita a emissão, mas quem decide se o
 ├── docker-compose.yml
 └── pom.xml
 ```
-
-## Status Atual
-
-Atualmente o fluxo principal já foi validado localmente:
-
-- criação de produto
-- autenticação JWT
-- cadastro de portador
-- publicação no SQS
-- consumo no `card-service`
-- criação do cartão
-- consulta agregada
-
-## Próximos Passos
-
-- ampliar cobertura de testes unitários e integração
-- adicionar Testcontainers
-- disponibilizar collection Postman/Insomnia
-- evoluir política de retry e observabilidade
